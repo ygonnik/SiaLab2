@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SiaLab2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] lines = File.ReadAllLines("file.txt");
+            int[,] num = new int[lines.Length, lines[0].Split(' ').Length];
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] temp = lines[i].Split(' ');
+                for (int j = 0; j < temp.Length; j++)
+                    num[i, j] = Convert.ToInt32(temp[j]);
+            }
+
+            Console.WriteLine("Квадратная доска:");
+            for (int i = 0; i < num.GetLength(0); i++)
+            {
+                for (int j = 0; j < num.GetLength(1); j++)
+                    Console.Write(String.Format("{0,3}", num[i, j]));
+                Console.WriteLine();
+            }
+
+            for(int i = 1; i < num.GetLength(0); i++)
+            {
+                num[0, i] = num[0, i] + num[0, i - 1]; //подсчитываем сумму в строках
+            }
+
+            for (int i = 1; i < num.GetLength(1); i++)
+            {
+                num[i, 0] = num[i, 0] + num[i - 1, 0]; //подсчитываем сумму в столбцах
+            }
+
+            for (int i = 1; i < num.GetLength(0); i++)
+            {
+                for (int j = 1; j < num.GetLength(1); j++)
+                    num[i, j] = num[i, j] + Math.Max(num[i - 1, j], num[i, j - 1]); //в зависимости от того какой элемент больше идем либо вниз либо вправо
+            }
+
+            Console.WriteLine("Максимальная сумма: " + num[num.GetLength(0) - 1, num.GetLength(1) - 1]);
+        }
+    }
+}
