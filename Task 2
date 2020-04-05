@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SiaLab2
+{
+    class Item
+    {
+        public int Price { get; set; }
+        public int Weight { get; set; }
+
+        public Item(int price, int weight)
+        {
+            Price = price;
+            Weight = weight;
+        }
+    }
+
+    class Program
+    {
+        static int BestItem(int n,int cap, List<Item> Items)
+        {
+            if (n == 0) return 0;
+            if (Items[n - 1].Weight > cap)
+                return BestItem(n - 1, cap, Items);
+            else
+                return Math.Max(BestItem(n - 1, cap, Items), BestItem(n - 1, cap - Items[n - 1].Weight, Items) + Items[n - 1].Price);
+        }
+
+        static void Main(string[] args)
+        {
+            List<Item> Items = new List<Item>() {new Item(600,1), new Item(5000, 2), new Item(1500, 4), new Item(40000, 2), new Item(500, 1)};
+            List<Item> BestItems = new List<Item>();
+            int сapacity = 8;
+            int sumPrice = 0;
+            int sumWeight = 0;
+
+            for(int i = Items.Count; i > 1; i--)
+            {
+                if (BestItem(i, сapacity, Items) > BestItem(i - 1, сapacity, Items))
+                {
+                    BestItems.Add(Items[i - 1]);
+                    сapacity -= Items[i - 1].Weight;
+                }
+            }
+
+            for (int i = 0; i < BestItems.Count; i++)
+            {
+                Console.WriteLine("Ценность: " + BestItems[i].Price + " Вес: " + BestItems[i].Weight);
+                sumPrice += BestItems[i].Price;
+                sumWeight += BestItems[i].Weight;
+            }
+            Console.WriteLine("Общая ценность: " + sumPrice + " Общий вес: " + sumWeight);
+        }
+    }
+}
