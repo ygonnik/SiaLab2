@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SiaLab2
+{
+    class Program
+    {
+        static double Bine (int n)
+        {
+            return (Math.Pow((1 + Math.Sqrt(5)) / 2, n) - Math.Pow((1 - Math.Sqrt(5)) / 2, n)) / Math.Sqrt(5);
+        }
+
+        static double Iteration(int n)
+        {
+            int a = 1;
+            int b = 1;
+            for (int i = 3; i <= n; i++)
+            {
+                if (i % 2 == 0) a += b;
+                else b += a;
+            }
+
+            if (a > b) return a;
+            else return b;
+        }
+
+        static double DnC(int n)
+        {
+            if (n < 3)
+                return 1;
+            else
+                return DnC(n - 1) + DnC(n - 2);
+        }
+
+        static double DownDP(int n)
+        {
+            if (n < 3)
+                return 1;
+            double a, b;
+            b = DownDP(n - 1);
+            a = b + DownDP(n - 2);
+
+            return a;
+        }
+
+        static double UpDP(int n)
+        {
+            int a = 0;
+            int b = 1;
+            for(int i = 0; i < n; i++)
+            {
+                int temp = a + b;
+                a = b;
+                b = temp;
+            }
+            return a;
+        }
+
+        static void Main(string[] args)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Bine(35);
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+            Console.WriteLine("Формула Бине: {0} секунд", ts.TotalSeconds);
+            sw.Reset();
+
+            sw.Start();
+            Iteration(35);
+            sw.Stop();
+            ts = sw.Elapsed;
+            Console.WriteLine("Итерационная формула: {0} секунд", ts.TotalSeconds);
+            sw.Reset();
+
+            sw.Start();
+            DnC(35);
+            sw.Stop();
+            ts = sw.Elapsed;
+            Console.WriteLine("Метод \"разделяй и всластвуй\": {0} секунд", ts.TotalSeconds);
+            sw.Reset();
+
+            sw.Start();
+            DownDP(35);
+            sw.Stop();
+            ts = sw.Elapsed;
+            Console.WriteLine("Метод нисходящего динамического программирования: {0} секунд", ts.TotalSeconds);
+            sw.Reset();
+
+            sw.Start();
+            UpDP(35);
+            sw.Stop();
+            ts = sw.Elapsed;
+            Console.WriteLine("Метод восходящего динамического программирования: {0} секунд", ts.TotalSeconds);
+            sw.Reset();
+        }
+    }
+}
