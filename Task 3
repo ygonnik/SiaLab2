@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SiaLab2
+{
+    class Program
+    {
+        static void Write(string a, string b)
+        {
+            Console.WriteLine($"Переложить диск с башни {a} на башню {b}");
+        }
+
+        static void Move(int height, string t1, string t2, string t3)
+        {
+            if (height >= 1)
+            {
+                Move(height - 1, t1, t3, t2);
+                Write(t1, t2);
+                Move(height - 1, t3, t2, t1);
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введите высоту башни:");
+            int n = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+            Move(n, "A", "B", "C");
+        }
+    }
+}
